@@ -121,7 +121,7 @@ El porcentaje de la variación en el precio que se explica por la extensión en 
 predict(reg3,data.frame(sqrft=2438,bdrms=4))
 ```
 
-El precio de venta estimado para la casa es de 354605.2
+El precio de venta estimado para la casa es de 354605.2 miles de dólares
 
 #### vi) El precio de venta de la primera casa en la muestra fue \$300,000 (así que price 300). Determine el residual para esta casa. ¿Sugiere esto que el comprador pagó de más o de menos por la casa?
 
