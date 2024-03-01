@@ -1,0 +1,132 @@
+---
+title: "Taller econometria 17Feb"
+format: html
+editor: visual
+---
+
+```{r}
+library(wooldridge)
+library(modelsummary)
+library(tidyverse)
+data("bwght")
+data("hprice1")
+```
+
+Andrea Alejo
+
+Valentina Castro
+
+# C3.1
+
+#### i) ¿Cual es el signo más probable para 2?
+
+El signo más probable es que dado los ingresos más altos, se provea mejores cuidados y por tanto que el bebé nazca con mejor peso y que tenga menores probabilidades de un deterioro en la salud
+
+#### ii) ¿Cree que cigs y faminc estén correlacionados? Explique por qué la correlación puede ser positiva o negativa.
+
+Se esperaria que la situación estuviera inclinándose más por una correlación negativa debil ya que aunque los niveles de ingreso altos ayudan a mejores cuidados en la persona, el tabaquismo no es una variable precisa para determminar una relación fuerte sobre el peso del bebé, gracias a que mujeres embarazadas de diferentes estratos o con diferente capacidad adquisitiva se supondria que tienen la misma probabilidad de fumar, el estrato o lugar socieconómico no afectaria directament; las costumbres y preferencias personales sí.
+
+#### iii) Ahora, calcule la ecuación con y sin faminc utilizando los datos del archivo BWGHT. RAW. Dé los resultados en forma de ecuación incluyendo el tamaño de la muestra y la Rcuadrada. Explique sus resultados enfocándose en si el añadir faminc modifica de manera sustancial el efecto esperado de cigs sobre bwght.
+
+```{r}
+cor(bwght$faminc,bwght$cigs)
+```
+
+```{r}
+reg<- lm(bwght~cigs+faminc, data = bwght)
+summary(reg)
+```
+
+Función de regresión poblacional (FRP)\
+\
+$$
+bwght=\ 116.97413-\ 0.46341 cigs+\ 0.09276 faminc+ u
+$$
+
+```{r}
+modelsummary(list("RLS"=reg), stars=T, output="kableExtra")
+```
+
+Muestra
+
+$$
+bwght_i=\ 116.97413-\ 0.46341 cigs_i+\ 0.09276 faminc_i+u
+$$
+
+$$
+\hat{bwght}_i=\ 116.97413-\ 0.46341 cigs_i+\ 0.09276 faminc_i
+$$
+
+$$
+R^2=0.030, n=1388
+$$
+
+```{r}
+reg1<- lm(bwght~cigs, data = bwght)
+summary(reg1) 
+```
+
+Función de regresión poblacional (FRP)\
+$$ bwght=\ 119.77190-\ 0.51377 cigs+ u $$
+
+```{r}
+modelsummary(list("RLS"=reg1), stars=T, output="kableExtra")
+```
+
+Muestra
+
+$$ bwght_i=\ 119.77190-\ 0.51377 cigs_i+u $$
+
+$$ \hat{bwght}_i=\ 119.77190-\ 0.51377 cigs_i$$
+
+$$ R^2=0.023, n=1388 $$
+
+Como se puede observar añadir la variable de ingresos familiares no varia sustancialmente los efectos de fumar durante el embarazo. Por tanto, se podria decir que cigs y faminc no están correlacionados y que no hay un efecto significativo entre estas variables que de como resultado un cambio relevante en el peso al nacer.
+
+# C3.2
+
+#### i) Escriba los resultados en forma de ecuación.
+
+```{r}
+reg3<- lm(price~sqrft+bdrms, data = hprice1)
+summary(reg3)
+```
+
+$$ price=\ -19.31500+\ 0.12844 sqrft+\ 15.19819bdrms+ u $$
+
+#### ii) ¿Cual es el incremento en precio estimado para una casa con una habitación (bdrms) más, manteniendo constante la superficie en pies cuadrados (sqrft)?
+
+El incremento en precio estimado para una casa con una habitación más,manteniendo constante la superficie en pies cuadrados es de 15.19819
+
+#### iii) ¿Cual es el incremento en precio estimado para una casa con una habitación adicional de 140 pies cuadrados? Compare esto con su respuesta al inciso (ii).
+
+```{r}
+(0.1284*140)+(1*15.1982)
+```
+
+El incremento en precio estimado para una casa con una habitación adicional de 140 pies cuadrados es de 33.17422 dolares
+
+#### iv) ¿Qué porcentaje de la variación en el precio se explica por la extensión en pies cuadrados y el número de habitaciones?
+
+```{r}
+resumen<-summary(reg3)
+resumen$adj.r.squared
+```
+
+El porcentaje de la variación en el precio que se explica por la extensión en pies cuadrados y el número de habitaciones es del 62%
+
+#### v) La primera casa en la muestra tiene sqrft 2,438 y bdrms 4. Determine el precio de venta estimado para esta casa con la línea de regresión de MCO.
+
+```{r}
+predict(reg3,data.frame(sqrft=2438,bdrms=4))
+```
+
+El precio de venta estimado para la casa es de 354605.2
+
+#### vi) El precio de venta de la primera casa en la muestra fue \$300,000 (así que price 300). Determine el residual para esta casa. ¿Sugiere esto que el comprador pagó de más o de menos por la casa?
+
+```{r}
+300-354.6052
+```
+
+Se puede decir que el comprador paga menos por la casa
